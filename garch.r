@@ -1,4 +1,4 @@
-X = nik# you can change your data
+X = cac# you can change your data
 n <- length(X)
 ##############################################################################################################################
 ##############################################################################################################################
@@ -45,6 +45,29 @@ btest <- VaRTest(alpha, actual = X, VaR = VaR, conf.level = 0.99)
 btest$expected.exceed
 btest$actual.exceed
 btest$uc.Decision
+
+#independence test
+len = length(X)
+Ut = pt(X,df = nu.)
+Nt = sort(rt(Ut, df = nu.))
+J = seq(1, len, by = 1)
+Nt.star = qt((J - 0.5)/length(X), df = nu.)
+cor(Nt, Nt.star)
+lmode = summary(lm(Nt~Nt.star))
+beta = lmode$coefficients[2,1]
+std.beta = lmode$coefficients[2,2]
+t.value = (beta - 1)/std.beta
+if(abs(t.value) > qt(0.975, df = (len - 2))){
+  paste("Failed to reject H0");
+}else{
+  paste("Reject H0")
+}
+
+#dstn test
+Ut.dstn = pt(X,df = nu.)
+Nt.dstn = rt(Ut.dstn, df = nu.)
+cor.max = max(acf(Nt.dstn, lag.max = 5)$acf[2:6])
+cor.max
 
 ##############################################################################################################################
 ##############################################################################################################################
